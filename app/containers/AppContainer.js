@@ -12,28 +12,21 @@ const {
 } = ReactNative
 
 class AppContainer extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { recipeCount: 0 }
-	}
-
-	incrementRecipeCount() {
-		this.setState({recipeCount: this.state.recipeCount + 1});
+	addRecipe() {
+		this.props.addRecipe()
 	}
 
 	render() {
 		return <View>
 			<Text style={{marginTop: 20}}>
-				I am App Container! Recipe Count: { this.state.recipeCount }
+				I am App Container! Recipe Count: { this.props.recipeCount }
 			</Text>
-			<TouchableHighlight onPress={() => {this.incrementRecipeCount() }}>
+			<TouchableHighlight onPress={() => {this.addRecipe() }}>
 				<Text>Add recipe</Text>
 			</TouchableHighlight>
 		</View>
 	}
-
 }
-
 
 function mapDispatchToProps(dispatch) {
 	// dispatching actions to the rest of the application
@@ -44,4 +37,9 @@ function mapDispatchToProps(dispatch) {
 
 // First arg of connect is the store, which starts off as empty, {}
 // connect takes in 2 functions. connect wires up store and mapDispatchToProps
-export default connect(() => { return {} }, mapDispatchToProps)(AppContainer);
+export default connect((state) => {
+	// state, the parameter passed in, is actually the global state of the application
+	return {
+		recipeCount: state.recipeCount
+	}
+}, mapDispatchToProps)(AppContainer);
