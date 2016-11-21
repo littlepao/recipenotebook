@@ -3,6 +3,24 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
+import reducer from './app/reducers'
+
+// Make sure logger is only active during DEV mode.
+const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ });
+
+function configureStore(initialState) {
+  /* enhancer is a way of composing different middleware/functions that run through each
+    transformation of state of the application. All middleware should go here */
+  const enhancer = compose(
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware,
+    )
+  )
+  return createStore(reducer, initialState, enhancer);
+}
+
+const store = configureStore({});
 
 import {
   AppRegistry,
@@ -11,11 +29,11 @@ import {
   View
 } from 'react-native';
 
-export default class recipenotebook extends Component {
+class Recipenotebook extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
+      <View>
+        <Text>
           To get started, edit index.ios.js
         </Text>
       </View>
@@ -23,23 +41,10 @@ export default class recipenotebook extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+const App = () => (
+  <Provider store={store}>
+    <Recipenotebook />
+  </Provider>
+)
 
-AppRegistry.registerComponent('recipenotebook', () => recipenotebook);
+AppRegistry.registerComponent('recipenotebook', () => App);

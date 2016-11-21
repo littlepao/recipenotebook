@@ -1,6 +1,5 @@
-import { combineReducers } from 'redux'
-import * as recipesReducer from './recipes';
+import createReducer from '../lib/createReducer'
+import * as types from '../actions/types'
 
-export default combineReducers(Object.assign(
-	recipesReducer,
-));
+export const searchedRecipes = createReducer({}, {
+})
