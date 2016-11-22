@@ -4,27 +4,17 @@ import ReactNative from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { ActionCreators } from '../actions'
-
-const {
-	View,
-	Text,
-	TouchableHighlight, // Button
-} = ReactNative
+import Home from './Home'
 
 class AppContainer extends Component {
-	addRecipe() {
-		this.props.addRecipe()
-	}
-
+	/*
+	AppContainer serves as a way to have all possible actions when necessary, but it's the
+	individual page/container responsibility to describe what portions of the state
+	it cares about and what it wants to listen for.
+	*/
 	render() {
-		return <View>
-			<Text style={{marginTop: 20}}>
-				I am App Container! Recipe Count: { this.props.recipeCount }
-			</Text>
-			<TouchableHighlight onPress={() => {this.addRecipe() }}>
-				<Text>Add recipe</Text>
-			</TouchableHighlight>
-		</View>
+		// Home view will describe how to connect to different elements of the state
+		return <Home {... this.props} />
 	}
 }
 
@@ -37,9 +27,6 @@ function mapDispatchToProps(dispatch) {
 
 // First arg of connect is the store, which starts off as empty, {}
 // connect takes in 2 functions. connect wires up store and mapDispatchToProps
-export default connect((state) => {
+export default connect((state) => { return {}
 	// state, the parameter passed in, is actually the global state of the application
-	return {
-		recipeCount: state.recipeCount
-	}
 }, mapDispatchToProps)(AppContainer);
